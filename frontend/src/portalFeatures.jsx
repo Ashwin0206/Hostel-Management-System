@@ -1,15 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Activity, ArrowUpRight, ClipboardList, FileWarning, Home, MapPin, Package, Search, Users } from 'lucide-react'
-
-const API = '/api'
-function api(path, options = {}) {
-  const token = localStorage.token
-  return fetch(API + path, { headers: { 'Content-Type': 'application/json', ...(token ? { Authorization: `Bearer ${token}` } : {}) }, ...options }).then(async response => {
-    const result = await response.json()
-    if (!response.ok) throw Error(result.detail || 'Something went wrong')
-    return result
-  })
-}
+import { api } from './api'
 function Page({ eyebrow, title, sub, children }) { return <main className="page"><div className="page-head"><div><p className="eyebrow">{eyebrow}</p><h1>{title}</h1><p className="page-sub">{sub}</p></div></div>{children}</main> }
 function Empty({ icon: Icon = ClipboardList, title, body }) { return <div className="empty-state"><span className="empty-icon"><Icon size={22} /></span><h3>{title}</h3><p>{body}</p></div> }
 function Badge({ children }) { return <span className={`badge ${String(children).toLowerCase().replaceAll('_', '-')}`}>{String(children).replaceAll('_', ' ')}</span> }

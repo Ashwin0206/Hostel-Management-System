@@ -2,9 +2,9 @@ import React, { useEffect, useState, useRef } from 'react'
 import { createRoot } from 'react-dom/client'
 import { Activity, AlertTriangle, ArrowUpRight, Bell, Building2, Check, CheckCircle2, ChevronDown, ChevronRight, ClipboardList, Clock3, DoorOpen, FileWarning, Home, LayoutDashboard, LogOut, Menu, MessageSquare, Moon, Plus, Search, Settings, ShieldCheck, Sparkles, Stethoscope, Sun, Users, X } from 'lucide-react'
 import './styles.css'
+import { api } from './api'
 import { AnalyticsPage, ComplaintOpsPage, LostFoundPage, RoomPage, StudentsPage, StudentAttendancePage, WardenAttendancePage } from './portalFeatures'
 
-const API = '/api'
 const nav = {
   STUDENT: [['Dashboard', LayoutDashboard], ['My Room', Home], ['Attendance', CheckCircle2], ['Requests', ClipboardList, ['Leave', 'Out Pass', 'Hospital']], ['Services', MessageSquare, ['Complaints', 'Cleaning']], ['Mess', Activity], ['More', ChevronDown, ['Notices', 'FAQ', 'Lost & Found']]],
   WARDEN: [['Dashboard', LayoutDashboard], ['Attendance', CheckCircle2], ['Students', Users], ['Requests', ClipboardList, ['Leave', 'Out Pass', 'Hospital']], ['Operations', ShieldCheck, ['Complaints', 'Cleaning', 'Staff']], ['More', ChevronDown, ['Notices', 'FAQ', 'Reports', 'Lost & Found']]],
@@ -15,14 +15,6 @@ const statuses = ['PENDING', 'REQUESTED', 'APPROVED', 'REJECTED', 'ARRANGED', 'S
 const kinds = ['ALL', 'LEAVE', 'OUTPASS', 'HOSPITAL', 'CLEANING']
 
 function WrenchIcon(props) { return <Settings {...props} /> }
-function api(path, options = {}) {
-  const token = localStorage.token
-  return fetch(API + path, { headers: { 'Content-Type': 'application/json', ...(token ? { Authorization: `Bearer ${token}` } : {}) }, ...options }).then(async response => {
-    const result = await response.json()
-    if (!response.ok) throw Error(result.detail || 'Something went wrong')
-    return result
-  })
-}
 function Badge({ children }) { return <span className={`badge ${String(children).toLowerCase().replaceAll('_', '-')}`}>{String(children).replaceAll('_', ' ')}</span> }
 function EmptyState({ icon: Icon = ClipboardList, title, body, action }) { return <div className="empty-state"><span className="empty-icon"><Icon size={22} /></span><h3>{title}</h3>{body && <p>{body}</p>}{action}</div> }
 function Loading({ rows = 3 }) { return <div className="loading-stack">{Array.from({ length: rows }, (_, index) => <div className="skeleton-line" key={index} />)}</div> }
