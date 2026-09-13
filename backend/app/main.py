@@ -6,12 +6,16 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, EmailStr, Field
 from sqlalchemy.orm import Session
 from sqlalchemy import func
-from .database import Base, engine, get_db
+from .database import Base, engine, get_db, SessionLocal
 from .models import User, Attendance, Complaint, Request, Notice, Notification, Worker, FAQ, MealRating
 from .models import LostFound, HostelAttendance
 from .auth import current_user, allow, verify_password, token_for
+from .seed import run as seed_database
 
 Base.metadata.create_all(bind=engine)
+with SessionLocal() as db:
+    if db.query(User).first() is None:
+        seed_database()
 app = FastAPI(title="HostelOS API")
 app.add_middleware(CORSMiddleware, allow_origins=["http://localhost:5173", "https://hostel-management-system-omega-rose.vercel.app"], allow_credentials=True, allow_methods=["*"], allow_headers=["*"])
 
