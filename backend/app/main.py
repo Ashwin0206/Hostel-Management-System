@@ -13,7 +13,7 @@ from .auth import current_user, allow, verify_password, token_for
 
 Base.metadata.create_all(bind=engine)
 app = FastAPI(title="HostelOS API")
-app.add_middleware(CORSMiddleware, allow_origins=["http://localhost:5173"], allow_credentials=True, allow_methods=["*"], allow_headers=["*"])
+app.add_middleware(CORSMiddleware, allow_origins=["http://localhost:5173", "https://hostel-management-system-omega-rose.vercel.app"], allow_credentials=True, allow_methods=["*"], allow_headers=["*"])
 
 class LoginIn(BaseModel): email: EmailStr; password: str
 class ComplaintIn(BaseModel): title: str = Field(min_length=3,max_length=120); description: str = Field(min_length=5,max_length=2000); location: str = Field(min_length=2,max_length=120)
